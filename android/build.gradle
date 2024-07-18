@@ -1,7 +1,30 @@
+Properties properties = new Properties()
+def file = new File('local.properties')
+if (file.canRead()) {
+    properties.load(file.newDataInputStream())
+}
+def GITHUB_USER_NAME = properties.getProperty("gpr.user") ?: System.getenv("USERNAME")
+def GITHUB_USER_TOKEN = properties.getProperty("gpr.key") ?: System.getenv("TOKEN")
+
 allprojects {
     repositories {
         google()
         mavenCentral()
+        maven {
+            name 'PAXUS Maven'
+            url 'https://maven.pkg.github.com/PAXTechnologyInc/PackageCentral'
+            credentials {
+                username = GITHUB_USER_NAME
+                password = GITHUB_USER_TOKEN
+            }
+        }
+        maven {
+            url 'https://maven.pkg.github.com/PAXTechnologyInc/POSLink-UI'
+            credentials {
+                username = GITHUB_USER_NAME
+                password = GITHUB_USER_TOKEN
+            }
+        }
     }
 }
 
